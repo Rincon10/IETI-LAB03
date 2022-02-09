@@ -254,6 +254,7 @@ Our API Endpoints can be used by anyone that knows the URL and API structure. In
 	       @PostMapping
 	       public TokenDto login( @RequestBody LoginDto loginDto )
 	       {
+	           // TODO: Implement findByEmail method
 	           User user = userService.findByEmail( loginDto.email );
 	           if ( BCrypt.checkpw( loginDto.password, user.getPasswordHash() ) )
 	           {
