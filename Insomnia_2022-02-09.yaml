@@ -1,0 +1,275 @@
+_type: export
+__export_format: 4
+__export_date: 2022-02-09T23:10:16.247Z
+__export_source: insomnia.desktop.app:v2021.7.2
+resources:
+  - _id: req_9ec605c48a1f4230a9e343b9b4c65bdb
+    parentId: fld_5ded36398b954eb48f9134282f21c162
+    modified: 1644377765294
+    created: 1643663684651
+    url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/{{ _.base_path
+      }}/fbf8d9cc-3dc6-43b7-b66b-1b19186b651f"
+    name: deleteUser
+    description: ""
+    method: DELETE
+    body:
+      mimeType: application/json
+      text: ""
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_fdd94ff49478405ebd57f39a6821bd51
+    authentication: {}
+    metaSortKey: -1643663684651
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_5ded36398b954eb48f9134282f21c162
+    parentId: wrk_fb3f505f74004df0a399cff979ae857f
+    modified: 1643663669668
+    created: 1643663669668
+    name: DELETE
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1643663669668
+    _type: request_group
+  - _id: wrk_fb3f505f74004df0a399cff979ae857f
+    parentId: null
+    modified: 1643661389594
+    created: 1643661389594
+    name: my-spec.yaml
+    description: ""
+    scope: design
+    _type: workspace
+  - _id: req_d0b05032717f427ea7f943d4f1b3127e
+    parentId: fld_215d09f09f974266851a3421904e09f3
+    modified: 1644377797213
+    created: 1643663513244
+    url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/{{ _.base_path
+      }}/20b73517-b85c-4190-b9d9-c844c6ca9f4a"
+    name: putUser
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Insomnia2 Actualizado",
+        	"email": "InsomniaTest2Actualizado@mail.escuelaing.edu.co",
+        	"lastName" : "Test2"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_1566dc2c4829470495ede91b08e5d3c7
+    authentication: {}
+    metaSortKey: -1643663513244
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_215d09f09f974266851a3421904e09f3
+    parentId: wrk_fb3f505f74004df0a399cff979ae857f
+    modified: 1643663502722
+    created: 1643663502722
+    name: UPDATE
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1643663502722
+    _type: request_group
+  - _id: req_93fbac0dd2be4aa1840cf3cbce33236f
+    parentId: fld_d9b42d755c964ba2bf66125c51f616f7
+    modified: 1644380318107
+    created: 1643662687611
+    url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/{{ _.base_path }}/"
+    name: postUser
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Insni2",
+        	"email": "IomiaTest2@mail.escuelaing.edu.co",
+        	"lastName" : "Teseet2"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_d39f689add864bb382eaa4cd5e839160
+    authentication: {}
+    metaSortKey: -1643662687611
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_d9b42d755c964ba2bf66125c51f616f7
+    parentId: wrk_fb3f505f74004df0a399cff979ae857f
+    modified: 1643662648212
+    created: 1643662648212
+    name: POST
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1643662648212
+    _type: request_group
+  - _id: req_1fbff370ee1245198658596e53aadeb9
+    parentId: fld_b25ee8f00e1144038465c10b20119c33
+    modified: 1644381426296
+    created: 1644381144715
+    url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/{{ _.base_path }}/like/a2"
+    name: getUsersWithNameOrLastNameLike
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1644381144715
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_b25ee8f00e1144038465c10b20119c33
+    parentId: wrk_fb3f505f74004df0a399cff979ae857f
+    modified: 1643662435726
+    created: 1643661584250
+    name: GET
+    description: ""
+    environment: {}
+    environmentPropertyOrder: {}
+    metaSortKey: -1643661584250
+    _type: request_group
+  - _id: req_d91990d3997b4d5f8fdd264beedba22b
+    parentId: fld_b25ee8f00e1144038465c10b20119c33
+    modified: 1644380862676
+    created: 1644379763994
+    url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/{{ _.base_path
+      }}/createdAfter/2022-02-08"
+    name: getUsersCreatedAfter
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1644379763994
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_eaed907ea2484cc49ada273e92a1d9ae
+    parentId: fld_b25ee8f00e1144038465c10b20119c33
+    modified: 1644335592581
+    created: 1643661575561
+    url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/{{ _.base_path }}"
+    name: getAllUsers
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1643661584200
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_b32dd3a1e5534199b145d41060ab3916
+    parentId: fld_b25ee8f00e1144038465c10b20119c33
+    modified: 1644377739056
+    created: 1643662193155
+    url: "{{ _.scheme }}://{{ _.host }}:{{ _.port }}/{{ _.base_path
+      }}/fbf8d9cc-3dc6-43b7-b66b-1b19186b651f"
+    name: getUserById
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1643661584150
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_84a4525b56e168655ade00e33ff5c0a8dceffdc8
+    parentId: wrk_fb3f505f74004df0a399cff979ae857f
+    modified: 1643661778805
+    created: 1643661389606
+    name: Base Environment
+    data: {}
+    dataPropertyOrder: {}
+    color: null
+    isPrivate: false
+    metaSortKey: 1643661389606
+    _type: environment
+  - _id: jar_84a4525b56e168655ade00e33ff5c0a8dceffdc8
+    parentId: wrk_fb3f505f74004df0a399cff979ae857f
+    modified: 1643661389615
+    created: 1643661389615
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_526a5431099045d2bd172a81e1625590
+    parentId: wrk_fb3f505f74004df0a399cff979ae857f
+    modified: 1643661394542
+    created: 1643661389596
+    fileName: my-spec.yaml
+    contents: ""
+    contentType: yaml
+    _type: api_spec
+  - _id: env_603425cab5764417b2a4ad07b18e52e8
+    parentId: env_84a4525b56e168655ade00e33ff5c0a8dceffdc8
+    modified: 1644335753971
+    created: 1643661859800
+    name: User API
+    data:
+      scheme: http
+      base_path: api/v1/user
+      host: localhost
+      port: "8080"
+    dataPropertyOrder:
+      "&":
+        - scheme
+        - base_path
+        - host
+        - port
+    color: null
+    isPrivate: false
+    metaSortKey: 1643661859800
+    _type: environment

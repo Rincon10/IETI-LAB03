@@ -1,0 +1,8 @@
+gradlew bootRun
+
+MONGODB_URI=mongodb://admin:admin@mycluster.79lwk.mongodb.net/myCluster?retryWrites=true&w=majority
+
+
+https://www.mongodb.com/compatibility/spring-boot
+
+0.0.0.0/0
