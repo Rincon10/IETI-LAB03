@@ -294,3 +294,220 @@ Our API Endpoints can be used by anyone that knows the URL and API structure. In
 17. Verify the authentication endpoint by sending a user's credentials ( Remember that we have to  add a password to the body now )
 18. If everything goes well you would have your token object response with it's corresponding expiration date
     
+### Part 3: Implement JWT Request Filter
+
+This filter will help you verify the authorization token send on the request authorization header or using a Cookie.
+
+1. Implement an *AbstractAuthenticationToken* that will facilitate the process of handling endpoints access based on
+   user roles. Create a new class called *TokenAuthentication* inside the *config* package:
+   ```java
+   import org.springframework.security.authentication.AbstractAuthenticationToken;
+   import org.springframework.security.core.GrantedAuthority;
+   import org.springframework.security.core.authority.SimpleGrantedAuthority;
+   
+   import java.util.Collection;
+   import java.util.List;
+   import java.util.stream.Collectors;
+   
+   public class TokenAuthentication
+   extends AbstractAuthenticationToken
+   {
+	   String token;
+   
+       String subject;
+   
+       List<String> roles;
+   
+       public TokenAuthentication( String token, String subject, List<String> roles )
+       {
+           super( null );
+           this.token = token;
+           this.subject = subject;
+           this.roles = roles;
+       }
+   
+       @Override
+       public boolean isAuthenticated()
+       {
+           return !token.isEmpty() && !subject.isEmpty() && !roles.isEmpty();
+       }
+   
+       @Override
+       public Object getCredentials()
+       {
+           return token;
+       }
+   
+       @Override
+       public Object getPrincipal()
+       {
+           return subject;
+       }
+   
+       @Override
+       public Collection<GrantedAuthority> getAuthorities()
+       {
+           return roles.stream().map( role -> new SimpleGrantedAuthority( "ROLE_" + role ) ).collect(
+               Collectors.toList() );
+       }
+   
+   
+   }
+   ```
+ 
+2. Create a new class inside the *config* package called *JwtRequestFilter*:
+
+   ```java
+   import io.jsonwebtoken.Claims;
+   import io.jsonwebtoken.ExpiredJwtException;
+   import io.jsonwebtoken.Jws;
+   import io.jsonwebtoken.Jwts;
+   import io.jsonwebtoken.MalformedJwtException;
+   import org.springframework.beans.factory.annotation.Value;
+   import org.springframework.http.HttpHeaders;
+   import org.springframework.http.HttpMethod;
+   import org.springframework.http.HttpStatus;
+   import org.springframework.security.core.context.SecurityContextHolder;
+   import org.springframework.stereotype.Component;
+   import org.springframework.web.filter.OncePerRequestFilter;
+   
+   import javax.servlet.FilterChain;
+   import javax.servlet.ServletException;
+   import javax.servlet.http.Cookie;
+   import javax.servlet.http.HttpServletRequest;
+   import javax.servlet.http.HttpServletResponse;
+   import java.io.IOException;
+   import java.util.ArrayList;
+   import java.util.Arrays;
+   import java.util.List;
+   import java.util.Objects;
+   import java.util.Optional;
+   
+   import static org.ada.school.utils.Constants.CLAIMS_ROLES_KEY;
+   import static org.ada.school.utils.Constants.COOKIE_NAME;
+   
+   @Component
+   public class JwtRequestFilter
+   extends OncePerRequestFilter
+   {
+   @Value( "${app.secret}" )
+   String secret;
+   
+       public JwtRequestFilter()
+       {
+       }
+   
+       @Override
+       protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain )
+           throws ServletException, IOException
+       {
+           String authHeader = request.getHeader( HttpHeaders.AUTHORIZATION );
+   
+           if ( HttpMethod.OPTIONS.name().equals( request.getMethod() ) )
+           {
+               response.setStatus( HttpServletResponse.SC_OK );
+               filterChain.doFilter( request, response );
+           }
+           else
+           {
+               try
+               {
+                   Optional<Cookie> optionalCookie =
+                       request.getCookies() != null ? Arrays.stream( request.getCookies() ).filter(
+                           cookie -> Objects.equals( cookie.getName(), COOKIE_NAME ) ).findFirst() : Optional.empty();
+   
+                   String headerJwt = null;
+                   if ( authHeader != null && authHeader.startsWith( "Bearer " ) )
+                   {
+                       headerJwt = authHeader.substring( 7 );
+                   }
+                   String token = optionalCookie.isPresent() ? optionalCookie.get().getValue() : headerJwt;
+   
+                   if ( token != null )
+                   {
+                       Jws<Claims> claims = Jwts.parser().setSigningKey( secret ).parseClaimsJws( token );
+                       Claims claimsBody = claims.getBody();
+                       String subject = claimsBody.getSubject();
+                       List<String> roles  = claims.getBody().get( CLAIMS_ROLES_KEY , ArrayList.class);
+   
+                       if (roles == null) {
+                           response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid token roles");
+                       } else {
+                           SecurityContextHolder.getContext().setAuthentication( new TokenAuthentication( token, subject, roles));
+                       }
+   
+                       request.setAttribute( "claims", claimsBody );
+                       request.setAttribute( "jwtUserId", subject );
+                       request.setAttribute("jwtUserRoles", roles);
+   
+                   }
+                   filterChain.doFilter( request, response );
+               }
+               catch ( MalformedJwtException e )
+               {
+                   response.sendError( HttpStatus.BAD_REQUEST.value(), "Missing or wrong token" );
+               }
+               catch ( ExpiredJwtException e )
+               {
+                   response.sendError( HttpStatus.UNAUTHORIZED.value(), "Token expired or malformed" );
+               }
+           }
+       }
+   
+   }
+   ```
+
+3.Modify the *SecurityConfiguration* class to include the *JwtRequestFilter*:
+
+
+   ```java
+
+@EnableWebSecurity
+@EnableGlobalMethodSecurity( securedEnabled = true, jsr250Enabled = true, prePostEnabled = true )
+public class SecurityConfiguration
+        extends WebSecurityConfigurerAdapter
+{
+
+   JwtRequestFilter jwtRequestFilter;
+
+   public SecurityConfiguration( @Autowired JwtRequestFilter jwtRequestFilter )
+   {
+      this.jwtRequestFilter = jwtRequestFilter;
+   }
+
+   @Override
+   protected void configure( HttpSecurity http )
+           throws Exception
+   {
+      http.addFilterBefore( jwtRequestFilter,
+                            BasicAuthenticationFilter.class )
+                            .cors()
+                            .and()
+                            .csrf()
+                            .disable()
+                            .authorizeRequests()
+                            .antMatchers( HttpMethod.POST, "/v1/auth" )
+                            .permitAll()
+                            .anyRequest()
+                            .authenticated()
+                            .and()
+                            .sessionManagement()
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS );
+   }
+}  
+   ```
+
+5. Add the following annotation to the DELETE user endpoint below the *@PostMapping* annotation. This will help you
+   restrict which users can perform this critical operation:
+      ```properties
+      @RolesAllowed("ADMIN")
+      ```
+6. Run the project and verify that it works as expected following these steps:
+   * Start the server.
+   * Send a POST request to the auth endpoint using the credentials of your test user.
+   * Copy the token from the response.
+   * Make a new GET request to the *user* endpoint adding the *Autorization header* with the word *Bearer* as this
+     example:
+      ```properties
+         Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI2MTMwZmMzMWYwNTk2YzE0YzRiOWY5NTMiLCJhZGFfcm9sZXMiOlsiVVNFUiJdLCJpYXQiOjE2MzA2MDAzMjAsImV4cCI6MTYzMDY4NjcyMH0.s29NZMHYDCsCXqj9W9ZajNnlwyzW4qJG832Z3PXhwhk
+      ```
