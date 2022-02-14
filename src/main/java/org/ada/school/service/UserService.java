@@ -11,6 +11,8 @@ public interface UserService
 
     User findById( String id );
 
+    User findByEmail( String email);
+
     List<User> all();
 
     boolean deleteById( String id );

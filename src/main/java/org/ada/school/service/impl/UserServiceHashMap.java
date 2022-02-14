@@ -30,6 +30,11 @@ public class UserServiceHashMap
     }
 
     @Override
+    public User findByEmail(String email) {
+        return null;
+    }
+
+    @Override
     public List<User> all() {
         return new ArrayList<>(usersMap.values());
     }
