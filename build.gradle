@@ -19,6 +19,15 @@ dependencies {
     implementation group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.10'
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.0.0'
+    // jwt dependencies
+    implementation 'javax.ws.rs:javax.ws.rs-api:2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-crypto'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    //The following dependencies are optional but helpful if your project isn't recognizing javax features:
+    implementation 'javax.ws.rs:javax.ws.rs-api'
+    implementation 'javax.xml.bind:jaxb-api'
+
     // https://mvnrepository.com/artifact/junit/junit
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
