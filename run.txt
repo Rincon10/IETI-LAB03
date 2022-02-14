@@ -1,7 +1,13 @@
 gradlew bootRun
 
-MONGODB_URI=mongodb://admin:admin@mycluster.79lwk.mongodb.net/myCluster?retryWrites=true&w=majority
+```
+#app.secret=123
+#spring.data.mongodb.uri=mongodb+srv://admin:admin@mycluster.79lwk.mongodb.net/myCluster?retryWrites=true&w=majority
+```
 
+
+MONGODB_URI=mongodb://admin:admin@mycluster.79lwk.mongodb.net/myCluster?retryWrites=true&w=majority
+SECRET=123
 
 https://www.mongodb.com/compatibility/spring-boot
 
