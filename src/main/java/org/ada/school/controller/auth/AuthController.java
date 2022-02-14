@@ -65,6 +65,5 @@ public class AuthController {
         } else {
             throw new InvalidCredentialsException();
         }
-
     }
 }
