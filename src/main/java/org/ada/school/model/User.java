@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,28 +20,31 @@ public class User {
     private String email;
     private String lastName;
     private String createdAt;
-    private String passwordHash;
+    private String password;
     private List<RoleEnum> roles;
 
     public User(UserDto dto) {
-        this(dto.getName(), dto.getEmail(), dto.getLastName());
+        this(dto.getName(), dto.getEmail(), dto.getLastName(), dto.getPassword());
     }
 
     public User() {
         this.id = UUID.randomUUID().toString();
         this.createdAt = java.time.LocalDate.now().toString();
+        this.roles = new ArrayList<>();
     }
 
-    public User(String name, String email, String lastName) {
+    public User(String name, String email, String lastName, String password) {
         this();
         this.name = name;
         this.email = email;
         this.lastName = lastName;
+        hashPassword(password);
+
 
     }
 
-    public User(String id, String name, String email, String lastName, String createdAt) {
-        this(name, email, lastName);
+    public User(String id, String name, String email, String lastName,String password, String createdAt) {
+        this(name, email, lastName, password);
         this.id = id;
         this.createdAt = createdAt;
     }
@@ -49,8 +53,12 @@ public class User {
         name = userDto.getName();
         lastName = userDto.getLastName();
         email = userDto.getEmail();
-        if (userDto.getPassword() != null) {
-            this.passwordHash = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt());
+        hashPassword(userDto.getPassword());
+    }
+
+    private void hashPassword(String password){
+        if (password != null) {
+            this.password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
     }
 
@@ -94,12 +102,12 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        hashPassword(password);
     }
 
     public List<RoleEnum> getRoles() {
