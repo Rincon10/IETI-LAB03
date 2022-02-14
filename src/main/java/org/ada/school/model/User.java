@@ -1,10 +1,13 @@
 package org.ada.school.model;
 
 import org.ada.school.dto.UserDto;
+import org.ada.school.model.enumData.RoleEnum;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import java.util.List;
 import java.util.UUID;
 
 @Document(collection = "User")
@@ -16,6 +19,8 @@ public class User {
     private String email;
     private String lastName;
     private String createdAt;
+    private String passwordHash;
+    private List<RoleEnum> roles;
 
     public User(UserDto dto) {
         this(dto.getName(), dto.getEmail(), dto.getLastName());
@@ -44,6 +49,9 @@ public class User {
         name = userDto.getName();
         lastName = userDto.getLastName();
         email = userDto.getEmail();
+        if (userDto.getPassword() != null) {
+            this.passwordHash = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt());
+        }
     }
 
     public String getId() {
@@ -84,5 +92,21 @@ public class User {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public List<RoleEnum> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleEnum> roles) {
+        this.roles = roles;
     }
 }
