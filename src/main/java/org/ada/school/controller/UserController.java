@@ -2,12 +2,14 @@ package org.ada.school.controller;
 
 import org.ada.school.dto.UserDto;
 import org.ada.school.model.User;
+import org.ada.school.model.enumData.RoleEnum;
 import org.ada.school.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
 @RestController
@@ -47,15 +49,18 @@ public class UserController {
     public ResponseEntity<User> create(@RequestBody UserDto userDto) {
         ModelMapper modelMapper = new ModelMapper();
         User user = modelMapper.map(userDto, User.class);
+//        user.addRole(RoleEnum.ADMIN);
         return ResponseEntity.ok(userService.create(user));
     }
 
     @PutMapping("/{id}")
+//    @RolesAllowed("ADMIN")
     public ResponseEntity<User> update(@RequestBody UserDto userDto, @PathVariable String id) {
         return ResponseEntity.ok(userService.update(userDto, id));
     }
 
     @DeleteMapping("/{id}")
+    @RolesAllowed("ADMIN")
     public ResponseEntity<Boolean> delete(@PathVariable String id) {
         return ResponseEntity.ok(userService.deleteById(id));
     }

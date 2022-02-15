@@ -21,7 +21,7 @@ public class User {
     private String lastName;
     private String createdAt;
     private String password;
-    private List<RoleEnum> roles;
+    private List<RoleEnum> roles = new ArrayList<>();
 
     public User(UserDto dto) {
         this(dto.getName(), dto.getEmail(), dto.getLastName(), dto.getPassword());
@@ -60,6 +60,10 @@ public class User {
         if (password != null) {
             this.password = BCrypt.hashpw(password, BCrypt.gensalt());
         }
+    }
+
+    public void addRole( RoleEnum roleEnum ){
+        if( !roles.contains( roleEnum)) roles.add(roleEnum);
     }
 
     public String getId() {

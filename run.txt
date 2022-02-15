@@ -12,3 +12,5 @@ SECRET=123
 https://www.mongodb.com/compatibility/spring-boot
 
 0.0.0.0/0
+
+https://www.ankursheel.com/blog/automatically-set-access-token-authenticated-requests-insomnia
